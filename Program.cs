@@ -14,7 +14,7 @@ using System.Collections.Generic;
 //
 // A2
 //          0   1   2   3   4   5
-//      0   1   0   0   0   1   0
+//      0   0   1   0   0   1   0
 //      1   1   0   1   1   0   0
 //      2   0   1   0   1   0   0
 //      3   0   1   1   0   1   0
@@ -51,7 +51,7 @@ using System.Collections.Generic;
 // A6
 //      Shortest path from 2 to 5: 2 → 3 → 4 → 5
 //      Traversal that finds it: BFS
-//      Why: BFS moves out level by level, finding the shortest path. DFS just follows one path as deep as it can go with no gaurantee of it being the shortest.
+//      Why: BFS moves out level by level, finding the shortest path. DFS just follows one path as deep as it can go with no guarantee of it being the shortest.
 //
 // A7
 //      Cycle: 0 → 1 → 3 → 4 → 0
@@ -64,7 +64,7 @@ using System.Collections.Generic;
 //      5 → [4]
 //
 //      Still connected? Yes
-//      Explanation: There is still one connection to each vertex, but no cycles.
+//      Explanation: Every vertex can reach every other one.
 //
 // A9
 //      Adjacency matrix or adjacency list? Adjacency list
@@ -78,12 +78,14 @@ class Graph
 {
     private Dictionary<int, List<int>> adj = new Dictionary<int, List<int>>();
 
+    // O(1)
     public void AddVertex(int v)
     {
         if (!adj.ContainsKey(v))
             adj[v] = new List<int>();
     }
 
+    // O(degree of u)
     public void AddEdge(int u, int v)
     {
         if (u == v)
@@ -96,11 +98,13 @@ class Graph
         adj[v].Add(u);
     }
 
+    // O(degree of u)
     public bool HasEdge(int u, int v)
     {
         return adj.ContainsKey(u) && adj[u].Contains(v);
     }
 
+    // O(degree of u + degree of v)
     public void RemoveEdge(int u, int v)
     {
         if (!adj.ContainsKey(u) || !adj.ContainsKey(v))
@@ -110,6 +114,7 @@ class Graph
         adj[v].Remove(u);
     }
 
+    // O(V + E)
     public void RemoveVertex(int v)
     {
         if (!adj.ContainsKey(v))
@@ -121,14 +126,16 @@ class Graph
         adj.Remove(v);
     }
 
+    // O(V log V + E)
     public void Print()
     {
-        foreach (var kvp in adj)
-        {
-            Console.WriteLine($"{kvp.Key}: [{string.Join(", ", kvp.Value)}]");
-        }
+        List<int> keys = new List<int>(adj.Keys);
+        keys.Sort();
+        foreach (int k in keys)
+            Console.WriteLine($"{k}: [{string.Join(", ", adj[k])}]");
     }
 
+    // O(V + E)
     public List<int> BFS(int start)
     {
         if (!adj.ContainsKey(start))
@@ -161,6 +168,7 @@ class Graph
         return order;
     }
 
+    // O(V + E)
     public List<int> DFS(int start)
     {
         List<int> order = new List<int>();
@@ -182,6 +190,7 @@ class Graph
         }
     }
 
+    // O(V + E)
     public List<int> ShortestPath(int from, int to)
     {
         List<int> path = new List<int>();
@@ -226,6 +235,7 @@ class Graph
         return path;
     }
 
+    // O(V + E)
     public int CountPieces()
     {
         HashSet<int> visited = new HashSet<int>();
@@ -249,6 +259,7 @@ class Graph
                 MarkPiece(next, visited);
     }
 
+    // O(V + E)
     public bool HasCycle()
     {
         HashSet<int> visited = new HashSet<int>();
@@ -311,7 +322,7 @@ class Program
         Console.WriteLine();
         graph.Print();
         Console.WriteLine("AddEdge(5, 4)");
-         graph.AddEdge(5, 4);
+        graph.AddEdge(5, 4);
         Console.WriteLine("AddEdge(7, 7)");
         graph.AddEdge(7, 7);
         graph.Print();
@@ -323,6 +334,7 @@ class Program
         Console.WriteLine($"HasCycle(): {graph.HasCycle()}");
         Console.WriteLine();
         Console.WriteLine("RemoveVertex(4)");
+        graph.RemoveVertex(4);
         graph.Print();
         Console.WriteLine($"CountPieces(): {graph.CountPieces()}");
 
