@@ -279,18 +279,52 @@ class Graph
 
 class Program
 {
+    static string Show(List<int> list)
+    {
+        return "[" + string.Join(", ", list) + "]";
+    }
+
     static void Main(string[] args)
     {
-        AddEdge(0, 1);
-        AddEdge(1, 2);
-        AddEdge(0, 3);
-        AddEdge(1, 4);
-        AddEdge(6, 7);
-        AddEdge(4, 6);
-        AddEdge(2, 5);
-        AddEdge(4, 5);
-        AddVertex(8);
+        Graph graph = new Graph();
 
-        Console.WriteLine(BFS(0));
+        graph.AddEdge(0, 1);
+        graph.AddEdge(1, 2);
+        graph.AddEdge(0, 3);
+        graph.AddEdge(3, 4);
+        graph.AddEdge(1, 4);
+        graph.AddEdge(6, 7);
+        graph.AddEdge(4, 6);
+        graph.AddEdge(2, 5);
+        graph.AddEdge(4, 5);
+        graph.AddVertex(8);
+
+        Console.WriteLine($"BFS(0): {Show(graph.BFS(0))}");
+        Console.WriteLine($"DFS(0): {Show(graph.DFS(0))}");
+        Console.WriteLine($"BFS(42): {Show(graph.BFS(42))}");
+        Console.WriteLine($"ShortestPath(0, 7): {Show(graph.ShortestPath(0, 7))}");
+        Console.WriteLine($"ShortestPath(0, 8): {Show(graph.ShortestPath(0, 8))}");
+        Console.WriteLine($"HasEdge(4, 1): {graph.HasEdge(4, 1)}");
+        Console.WriteLine($"CountPieces(): {graph.CountPieces()}");
+        Console.WriteLine($"HasCycle(): {graph.HasCycle()}");
+
+        Console.WriteLine();
+        graph.Print();
+        Console.WriteLine("AddEdge(5, 4)");
+         graph.AddEdge(5, 4);
+        Console.WriteLine("AddEdge(7, 7)");
+        graph.AddEdge(7, 7);
+        graph.Print();
+        Console.WriteLine();
+        Console.WriteLine("RemoveEdge(1, 4)");
+        graph.RemoveEdge(1, 4);
+        Console.WriteLine("RemoveEdge(4, 5)");
+        graph.RemoveEdge(4, 5);
+        Console.WriteLine($"HasCycle(): {graph.HasCycle()}");
+        Console.WriteLine();
+        Console.WriteLine("RemoveVertex(4)");
+        graph.Print();
+        Console.WriteLine($"CountPieces(): {graph.CountPieces()}");
+
     }
 }
